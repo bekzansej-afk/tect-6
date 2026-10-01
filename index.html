@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информатика - 6 сынып: Интерактивті тест</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --background-color: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--secondary-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .version-selector, .quiz-section, .result-section {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .grid-versions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            background-color: var(--primary-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-box {
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            background-color: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 15px;
+        }
+
+        .option-item:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724;
+        }
+
+        .option-item.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--danger-color) !important;
+            color: #721c24;
+        }
+
+        .feedback-overlay {
+            text-align: center;
+            font-size: 48px;
+            margin: 15px 0;
+            height: 60px;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .result-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .score-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .review-section {
+            margin-top: 25px;
+            max-height: 250px;
+            overflow-y: auto;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        .review-item {
+            padding: 10px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Информатика пәнінен интерактивті тест</h1>
+    <p class="subtitle">6-сынып оқушыларының білімін тексеруге арналған</p>
+
+    <!-- Нұсқаларды таңдау бөлімі -->
+    <div id="versionSelector" class="version-selector active">
+        <h3 style="text-align: center;">Тест нұсқасын таңдаңыз:</h3>
+        <div class="grid-versions">
+            <button class="btn" onclick="startQuiz(1)">1-нұсқа</button>
+            <button class="btn" onclick="startQuiz(2)">2-нұсқа</button>
+            <button class="btn" onclick="startQuiz(3)">3-нұсқа</button>
+            <button class="btn" onclick="startQuiz(4)">4-нұсқа</button>
+            <button class="btn" onclick="startQuiz(5)">5-нұсқа</button>
+        </div>
+    </div>
+
+    <!-- Тест сұрақтарының бөлімі -->
+    <div id="quizSection" class="quiz-section">
+        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #7f8c8d; margin-bottom: 5px;">
+            <span id="versionTitle">Нұсқа</span>
+            <span id="questionCount">Сұрақ: 1/10</span>
+        </div>
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+
+        <div class="question-box">
+            <div id="questionText" class="question-text">Сұрақ мәтіні осы жерде болады?</div>
+            <ul id="optionsList" class="options-list">
+                <!-- Жауаптар скрипт арқылы шығады -->
+            </ul>
+        </div>
+
+        <div id="feedback" class="feedback-overlay"></div>
+    </div>
+
+    <!-- Нәтиже көрсету бөлімі -->
+    <div id="resultSection" class="result-section">
+        <div class="result-card">
+            <h2>Тест аяқталды!</h2>
+            <div id="finalEmoji" style="font-size: 64px; margin: 15px 0;">🏆</div>
+            <div class="score-display" id="scoreText">0 / 10</div>
+            <p id="resultMessage">Керемет нәтиже!</p>
+            
+            <div class="review-section" id="reviewSection">
+                <h4>Қателермен жұмыс:</h4>
+                <div id="reviewList"></div>
+            </div>
+
+            <button class="btn" style="margin-top: 20px; width: 100%;" onclick="resetQuiz()">Бас менюге қайту</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Тест базасы (5 нұсқа, әрқайсысында 10 сұрақ)
+    const quizData = {
+        1: [
+            { q: "Интернетте басқа адамға қоқан-лоқы көрсету, балағаттау қалай аталады?", a: ["Интернеттегі агрессия (Кибербуллинг)", "Алаяқтық", "Ойынға тәуелділік", "Фишинг"], c: 0 },
+            { q: "Компьютерлік ойындардан бас тарта алмау және уақытты бақылай алмау дерті?", a: ["Ақпараттық қауіпсіздік", "Ойынға тәуелділік", "Компьютерлік вирус", "Әлеуметтік желі"], c: 1 },
+            { q: "Адамнан немесе қоршаған ортадан алынған өңделмеген алғашқы белгілер немесе таңбалар?", a: ["Білім", "Ақпарат", "Деректер", "Модель"], c: 2 },
+            { q: "Деректерді өңдеу, талдау және логикалық қорытынды жасау нәтижесінде не қалыптасады?", a: ["Білім", "Сигнал", "Код", "Файл"], c: 0 },
+            { q: "Жасанды интеллект (ЖИ) модельдерін дұрыс оқыту үшін не ең маңызды рөл атқарады?", a: ["Компьютердің түсі", "Сапалы және үлкен көлемді деректер", "Пайдаланушының есімі", "Интернеттің жылдамдығы"], c: 1 },
+            { q: "Компьютер өшірілгенде ішіндегі мәліметтері жойылып кететін жедел жады қалай аталады?", a: ["ROM", "RAM (Жедел сақтау құрылғысы)", "Кэш-жады", "Сыртқы диск"], c: 1 },
+            { q: "Компьютер іске қосылғанда жүйелік файлдарды оқитын, тек оқуға арналған тұрақты жады?", a: ["RAM", "Процессор", "ROM (Тұрақты сақтау құрылғысы)", "Флешка"], c: 2 },
+            { q: "Орталық процессордың жылдамдығын, яғни бір секундта орындайтын амалдар санын анықтайтын сипаттама?", a: ["Ядро саны", "Тактілік жиілік", "Кэш көлемі", "Жады сыйымдылығы"], c: 1 },
+            { q: "Пайдаланушы мен компьютер құрылғылары арасындағы байланысты қамтамасыз ететін басты программа?", a: ["Мәтіндік редактор", "Браузер", "Операциялық жүйе", "Антивирус"], c: 2 },
+            { q: "Файлдық жүйеде мәтіндік құжаттардың кеңейтілімі қандай болады?", a: [".exe", ".mp3", ".jpg", ".txt немесе .docx"], c: 3 }
+        ],
+        2: [
+            { q: "Интернетте жалған сілтемелер арқылы логин мен парольді ұрлау әрекеті?", a: ["Фишинг (Алаяқтық)", "Ойынға тәуелділік", "Кибербуллинг", "Желілік этикет"], c: 0 },
+            { q: "Интернетте танымайтын адам сізден үйіңіздің мекенжайын сұраса не істеу керек?", a: ["Мекенжайды бірден жазу", "Жауап бермеу және ата-анаға айту", "Достарыңнан сұрау", "Суретке түсіріп жіберу"], c: 1 },
+            { q: "Ақпарат дегеніміз не?", a: ["Кез келген сандар жиынтығы", "Түсініксіз белгілер", "Адамның мағынасын түсінетін, өңделген деректері", "Тек кітаптағы мәтіндер"], c: 2 },
+            { q: "Жасанды интеллект суреттерді тануды үйренуі үшін оған не қажет?", a: ["Мыңдаған таңбаланған суреттер жиынтығы (деректер)", "Жаңа пернетақта", "Компьютерді өшіру", "Ойын ойнау"], c: 0 },
+            { q: "Процессор мен жедел жады арасындағы мәлімет алмасуды жылдамдататын өте тез жады?", a: ["Сыртқы жады", "Кэш-жады", "ROM", "Тұрақты диск"], c: 1 },
+            { q: "Процессордың бір уақытта бірнеше есепті қатар шығару мүмкіндігі неге байланысты?", a: ["Ядро санына", "Дискінің көлеміне", "Монитордың өлшеміне", "Процессордың түсіне"], c: 0 },
